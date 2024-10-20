@@ -19,8 +19,8 @@ type OpenMeteoProvider struct {
 	logLevel string
 }
 
-// NewOpenMeteoProvider returns a new instance of OpenMeteoProvider
-func NewOpenMeteoProvider(cfg *config.Config) (*OpenMeteoProvider, error) {
+// newOpenMeteoProvider returns a new instance of OpenMeteoProvider
+func newOpenMeteoProvider(cfg *config.Config) (*OpenMeteoProvider, error) {
 	if cfg == nil {
 		return nil, errors.New("configuration cannot be nil")
 	}

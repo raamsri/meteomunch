@@ -48,13 +48,13 @@ type Provider interface {
 func NewProvider(name string, cfg *config.Config) (Provider, error) {
 	switch name {
 	case "open-meteo":
-		p, err := NewOpenMeteoProvider(cfg)
+		p, err := newOpenMeteoProvider(cfg)
 		if err != nil {
 			return nil, err
 		}
 		return p, nil
 	case "meteoblue":
-		p, err := NewMeteoBlueProvider(cfg)
+		p, err := newMeteoBlueProvider(cfg)
 		if err != nil {
 			return nil, err
 		}

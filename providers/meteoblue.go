@@ -19,7 +19,7 @@ type MeteoBlueProvider struct {
 	logLevel string
 }
 
-func NewMeteoBlueProvider(cfg *config.Config) (*MeteoBlueProvider, error) {
+func newMeteoBlueProvider(cfg *config.Config) (*MeteoBlueProvider, error) {
 	if cfg == nil {
 		return nil, errors.New("configuration cannot be nil")
 	}
