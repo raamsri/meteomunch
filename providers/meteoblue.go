@@ -13,13 +13,13 @@ import (
 
 const meteoBlueProviderName = "meteoblue"
 
-type MeteoBlueProvider struct {
+type MeteoBlue struct {
 	client   rest.HTTPClient
 	config   config.MeteoProvider
 	logLevel string
 }
 
-func newMeteoBlueProvider(cfg *config.Config) (*MeteoBlueProvider, error) {
+func newMeteoBlue(cfg *config.Config) (*MeteoBlue, error) {
 	if cfg == nil {
 		return nil, errors.New("configuration cannot be nil")
 	}
@@ -46,14 +46,14 @@ func newMeteoBlueProvider(cfg *config.Config) (*MeteoBlueProvider, error) {
 		client.EnableTrace()
 	}
 
-	return &MeteoBlueProvider{
+	return &MeteoBlue{
 		client:   client,
 		config:   meteoConfig,
 		logLevel: logLevel,
 	}, nil
 }
 
-func (p *MeteoBlueProvider) FetchData(qp map[string]string) (*plumber.BaseData, error) {
+func (p *MeteoBlue) FetchData(qp map[string]string) (*plumber.BaseData, error) {
 	// Creating a new request everytime we fecth data
 	p.client.NewRequest()
 	resp, err := p.client.SetQueryParams(qp).Get(p.config.APIPath)

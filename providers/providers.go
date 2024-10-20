@@ -44,17 +44,17 @@ type Provider interface {
 	FetchData(queryParams map[string]string) (*plumber.BaseData, error)
 }
 
-// NewProvider returns the appropriate provider based on the name
-func NewProvider(name string, cfg *config.Config) (Provider, error) {
+// New returns the appropriate provider based on the name
+func New(name string, cfg *config.Config) (Provider, error) {
 	switch name {
 	case "open-meteo":
-		p, err := newOpenMeteoProvider(cfg)
+		p, err := newOpenMeteo(cfg)
 		if err != nil {
 			return nil, err
 		}
 		return p, nil
 	case "meteoblue":
-		p, err := newMeteoBlueProvider(cfg)
+		p, err := newMeteoBlue(cfg)
 		if err != nil {
 			return nil, err
 		}
