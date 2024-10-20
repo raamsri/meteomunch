@@ -14,17 +14,18 @@ import (
 const meteoBlueProviderName = "meteoblue"
 
 type MeteoBlueProvider struct {
-	client rest.HTTPClient
-	config config.MeteoProvider
+	client   rest.HTTPClient
+	config   config.MeteoProvider
+	logLevel string
 }
 
-func NewMeteoBlueProvider() (*MeteoBlueProvider, error) {
-	cfg, err := config.Get()
-	if err != nil {
-		return nil, err
+func NewMeteoBlueProvider(cfg *config.Config) (*MeteoBlueProvider, error) {
+	if cfg == nil {
+		return nil, errors.New("configuration cannot be nil")
 	}
 
 	var meteoConfig config.MeteoProvider
+	logLevel := cfg.Munch.LogLevel
 	found := false
 
 	for _, provider := range cfg.MeteoProviders {
@@ -46,8 +47,9 @@ func NewMeteoBlueProvider() (*MeteoBlueProvider, error) {
 	}
 
 	return &MeteoBlueProvider{
-		client: client,
-		config: meteoConfig,
+		client:   client,
+		config:   meteoConfig,
+		logLevel: logLevel,
 	}, nil
 }
 
@@ -59,14 +61,9 @@ func (p *MeteoBlueProvider) FetchData(qp map[string]string) (*plumber.BaseData, 
 		return nil, err
 	}
 
-	cfg, err := config.Get()
-	if err != nil {
-		return nil, err
-	}
-
 	logger := logger.NewTag("providers:open-meteo")
 
-	if cfg.Munch.LogLevel == "debug" {
+	if p.logLevel == "debug" {
 		// Refraining from logger.Debug() as it doesn't pretty print the resty response stats and body
 		// And, this is just for debugging purposes so it's okay to use fmt.Println as it's not logged in production
 		logger.Debug("Response", "status:", resp.Status())

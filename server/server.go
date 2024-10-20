@@ -37,7 +37,7 @@ func Serve(ctx context.Context, args []string) {
 	})
 
 	mux.HandleFunc("GET /open-meteo", func(w http.ResponseWriter, r *http.Request) {
-		p, err := providers.NewOpenMeteoProvider()
+		p, err := providers.NewOpenMeteoProvider(cfg)
 		if err != nil {
 			logger.Error(e.FAIL, "err", err, "description", "Couldn't create OpenMeteoProvider")
 			w.WriteHeader(http.StatusInternalServerError)
@@ -60,22 +60,22 @@ func Serve(ctx context.Context, args []string) {
 	})
 
 	mux.HandleFunc("GET /meteo", func(w http.ResponseWriter, r *http.Request) {
-		p, err := providers.NewMeteoBlueProvider()
+		p, err := providers.NewMeteoBlueProvider(cfg)
 		if err != nil {
 			logger.Error(e.FAIL, "err", err, "description", "Couldn't create MeteoBlueProvider")
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 		qp := map[string]string{
-			"lat":           "47.558",
-			"lon":           "7.587",
-			"asl":           "279",
-			"tz":            "Europe/Zurich",
+			"lat": "11.0056",
+			"lon": "76.9661",
+			// "asl":           "279",
+			"tz":            "GMT",
 			"name":          "Test",
 			"windspeed":     "kmh",
 			"format":        "json",
-			"history_days":  "1",
-			"forecast_days": "0",
+			"history_days":  "0",
+			"forecast_days": "1",
 			"apikey":        cfg.MeteoProviders[0].APIKey,
 		}
 		bd, err := p.FetchData(qp)
